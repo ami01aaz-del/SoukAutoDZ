@@ -1,0 +1,482 @@
+<!DOCTYPE html><html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أضف سيارتك | SoukAutoDZ</title><style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f5f7fa;
+        color: #222;
+    }
+
+    header {
+        background: white;
+        padding: 20px 15px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+    }
+
+    header h1 {
+        margin: 0;
+        color: #155eef;
+        font-size: 28px;
+    }
+
+    header p {
+        margin-bottom: 0;
+        color: #666;
+    }
+
+    .container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 15px;
+    }
+
+    .form-box {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px #0000000d;
+    }
+
+    h2 {
+        margin-top: 0;
+        font-size: 22px;
+    }
+
+    .intro {
+        color: #666;
+        font-size: 14px;
+        line-height: 1.8;
+    }
+
+    label {
+        display: block;
+        margin-top: 16px;
+        margin-bottom: 7px;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    input, select, textarea {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #d5d9e0;
+        border-radius: 7px;
+        background: white;
+        font-size: 15px;
+        font-family: Arial, sans-serif;
+    }
+
+    textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    .hint {
+        display: block;
+        margin-top: 6px;
+        font-size: 12px;
+        color: #777;
+    }
+
+    .submit-button {
+        width: 100%;
+        margin-top: 24px;
+        padding: 15px;
+        border: none;
+        border-radius: 8px;
+        background: #155eef;
+        color: white;
+        font-size: 17px;
+        font-weight: bold;
+    }
+
+    .back-link {
+        display: block;
+        margin-top: 15px;
+        padding: 13px;
+        border: 1px solid #155eef;
+        border-radius: 8px;
+        color: #155eef;
+        text-align: center;
+        text-decoration: none;
+    }
+
+    .notice {
+        margin-top: 18px;
+        padding: 12px;
+        border-radius: 7px;
+        background: #fff7e6;
+        color: #805b00;
+        font-size: 13px;
+        line-height: 1.8;
+    }
+
+    footer {
+        margin-top: 25px;
+        padding: 20px;
+        text-align: center;
+        color: #777;
+        background: white;
+    }
+</style>
+
+</head><body><header>
+    <h1>SoukAutoDZ</h1>
+    <p>أضف إعلان سيارتك مجانًا 🇩🇿</p>
+</header>
+
+<main class="container">
+
+    <section class="form-box">
+
+        <h2>🚗 معلومات السيارة</h2>
+
+        <p class="intro">
+            املأ المعلومات التالية لتجهيز إعلان سيارتك.
+            احرص على إدخال معلومات صحيحة.
+        </p>
+
+        <form id="carForm">
+
+            <label for="brand">ماركة السيارة *</label>
+            <select id="brand" name="brand" required>
+                <option value="">اختر الماركة</option>
+                <option>Renault</option>
+                <option>Peugeot</option>
+                <option>Dacia</option>
+                <option>Volkswagen</option>
+                <option>Hyundai</option>
+                <option>Toyota</option>
+                <option>Fiat</option>
+                <option>Citroën</option>
+                <option>Seat</option>
+                <option>Skoda</option>
+                <option>Chery</option>
+                <option>Geely</option>
+                <option>أخرى</option>
+            </select>
+
+            <label for="model">موديل السيارة *</label>
+            <input
+                type="text"
+                id="model"
+                name="model"
+                placeholder="مثال: Clio 4"
+                required
+            >
+
+            <label for="year">سنة الصنع *</label>
+            <input
+                type="number"
+                id="year"
+                name="year"
+                min="1950"
+                max="2026"
+                placeholder="مثال: 2018"
+                required
+            >
+
+            <label for="price">السعر بالدينار الجزائري *</label>
+            <input
+                type="number"
+                id="price"
+                name="price"
+                min="1"
+                placeholder="مثال: 2800000"
+                required
+            >
+            <span class="hint">مثال: 2,800,000 دج يساوي 280 مليون سنتيم.</span>
+
+            <label for="wilaya">الولاية *</label>
+            <select id="wilaya" name="wilaya" required>
+                <option value="">اختر الولاية</option>
+                <option>أدرار</option>
+                <option>الشلف</option>
+                <option>الأغواط</option>
+                <option>أم البواقي</option>
+                <option>باتنة</option>
+                <option>بجاية</option>
+                <option>بسكرة</option>
+                <option>بشار</option>
+                <option>البليدة</option>
+                <option>البويرة</option>
+                <option>تمنراست</option>
+                <option>تبسة</option>
+                <option>تلمسان</option>
+                <option>تيارت</option>
+                <option>تيزي وزو</option>
+                <option>الجزائر</option>
+                <option>الجلفة</option>
+                <option>جيجل</option>
+                <option>سطيف</option>
+                <option>سعيدة</option>
+                <option>سكيكدة</option>
+                <option>سيدي بلعباس</option>
+                <option>عنابة</option>
+                <option>قالمة</option>
+                <option>قسنطينة</option>
+                <option>المدية</option>
+                <option>مستغانم</option>
+                <option>المسيلة</option>
+                <option>معسكر</option>
+                <option>ورقلة</option>
+                <option>وهران</option>
+                <option>البيض</option>
+                <option>إليزي</option>
+                <option>برج بوعريريج</option>
+                <option>بومرداس</option>
+                <option>الطارف</option>
+                <option>تندوف</option>
+                <option>تيسمسيلت</option>
+                <option>الوادي</option>
+                <option>خنشلة</option>
+                <option>سوق أهراس</option>
+                <option>تيبازة</option>
+                <option>ميلة</option>
+                <option>عين الدفلى</option>
+                <option>النعامة</option>
+                <option>عين تموشنت</option>
+                <option>غرداية</option>
+                <option>غليزان</option>
+                <option>تيميمون</option>
+                <option>برج باجي مختار</option>
+                <option>أولاد جلال</option>
+                <option>بني عباس</option>
+                <option>عين صالح</option>
+                <option>عين قزام</option>
+                <option>تقرت</option>
+                <option>جانت</option>
+                <option>المغير</option>
+                <option>المنيعة</option>
+              </select>
+
+            <label for="fuel">نوع الوقود *</label>
+            <select id="fuel" name="fuel" required>
+                <option value="">اختر نوع الوقود</option>
+                <option>بنزين</option>
+                <option>ديزل</option>
+                <option>غاز GPL</option>
+                <option>بنزين وغاز GPL</option>
+                <option>كهرباء</option>
+                <option>هجين</option>
+            </select>
+
+            <label for="mileage">المسافة المقطوعة (كم) *</label>
+            <input
+                type="number"
+                id="mileage"
+                name="mileage"
+                min="0"
+                placeholder="مثال: 120000"
+                required
+            >
+
+            <label for="transmission">علبة السرعة *</label>
+            <select id="transmission" name="transmission" required>
+                <option value="">اختر نوع علبة السرعة</option>
+                <option>يدوية</option>
+                <option>أوتوماتيكية</option>
+            </select>
+
+            <label for="description">وصف السيارة</label>
+            <textarea
+                id="description"
+                name="description"
+                placeholder="اكتب معلومات إضافية عن حالة السيارة وتجهيزاتها..."
+            ></textarea>
+
+            <label for="phone">رقم هاتف البائع *</label>
+            <input
+                type="tel"
+                id="phone"
+                name="phone"
+                placeholder="مثال: 0550123456"
+                required
+            >
+
+            <label for="photos">صور السيارة</label>
+
+<input
+    type="file"
+    id="photos"
+    name="photos"
+    accept="image/jpeg,image/png,image/webp"
+    multiple
+    onchange="alert('عدد الصور المختارة: ' + this.files.length)"
+>
+
+<span class="hint">
+    يمكنك اختيار حتى 5 صور بصيغة JPG أو PNG أو WebP.
+    الحد الأقصى لحجم كل صورة 5 ميغابايت.
+</span>
+
+                يمكنك اختيار عدة صور من هاتفك. حفظ الصور وعرضها للزوار يحتاج إلى ربط الموقع بخدمة تخزين.
+            </span>
+
+            <button type="submit" class="submit-button">
+                إرسال الإعلان
+            </button>
+
+        </form>
+
+      <div class="notice">
+    <strong>ملاحظة:</strong>
+    بعد إرسال الإعلان، سيبقى قيد المراجعة قبل نشره على الموقع.
+    تأكد من صحة المعلومات ورقم الهاتف قبل الإرسال.
+</div>
+
+        <a href="index.html" class="back-link">
+            العودة إلى الصفحة الرئيسية
+        </a>
+
+    </section>
+
+</main>
+
+<footer>
+    © 2026 SoukAutoDZ - سوق السيارات الجزائرية
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+
+<script>
+const db = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+const form = document.getElementById("carForm");
+
+form.addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const button = form.querySelector(".submit-button");
+    const originalText = button.textContent;
+
+    try {
+        const brand = document.getElementById("brand").value.trim();
+        const model = document.getElementById("model").value.trim();
+        const year = Number(document.getElementById("year").value);
+        const price = Number(document.getElementById("price").value);
+        const wilaya = document.getElementById("wilaya").value;
+        const fuel = document.getElementById("fuel").value;
+        const mileage = Number(document.getElementById("mileage").value);
+        const transmission = document.getElementById("transmission").value;
+        const description = document.getElementById("description").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const photos = Array.from(document.getElementById("photos").files);
+        
+        alert("عدد الصور المختارة: " + photos.length);
+console.log("الصور المختارة:", photos);
+
+        if (!form.reportValidity()) return;
+
+        if (year < 1950 || year > new Date().getFullYear()) {
+            alert("يرجى إدخال سنة صنع صحيحة.");
+            return;
+        }
+
+        if (price <= 0 || mileage < 0) {
+            alert("يرجى التأكد من السعر والمسافة المقطوعة.");
+            return;
+        }
+
+        if (photos.length > 5) {
+            alert("يمكنك اختيار 5 صور كحد أقصى.");
+            return;
+        }
+
+        for (const photo of photos) {
+            if (!["image/jpeg", "image/png", "image/webp"].includes(photo.type)) {
+                alert("الصور المقبولة هي JPG وPNG وWebP فقط.");
+                return;
+            }
+
+            if (photo.size > 5 * 1024 * 1024) {
+                alert("يجب ألا يتجاوز حجم كل صورة 5 ميغابايت.");
+                return;
+            }
+        }
+
+        button.disabled = true;
+        button.textContent = "جارٍ إرسال الإعلان...";
+
+        const imageUrls = [];
+
+        for (const photo of photos) {
+            const extension = photo.type === "image/jpeg" ? "jpg" :
+                              photo.type === "image/png" ? "png" : "webp";
+
+            const randomPart = window.crypto && crypto.randomUUID
+                ? crypto.randomUUID()
+                : Date.now() + "-" + Math.random().toString(36).slice(2);
+
+            const filePath = randomPart + "." + extension;
+
+            const { error: uploadError } = await db.storage
+                .from("car-images")
+                .upload(filePath, photo, {
+                    contentType: photo.type,
+                    upsert: false
+                });
+
+            if (uploadError) throw uploadError;
+
+            const { data: urlData } = db.storage
+                .from("car-images")
+                .getPublicUrl(filePath);
+
+            imageUrls.push(urlData.publicUrl);
+        }
+
+        const { error: insertError } = await db
+            .from("cars")
+            .insert([{
+                brand,
+                model,
+                year,
+                price,
+                wilaya,
+                fuel,
+                mileage,
+                transmission,
+                description,
+                phone,
+                images: imageUrls,
+                status: "pending"
+            }]);
+
+        if (insertError) throw insertError;
+
+        alert("تم إرسال إعلانك بنجاح! سيبقى قيد المراجعة قبل نشره.");
+
+        form.reset();
+
+    } catch (error) {
+        console.error("SoukAutoDZ error:", error);
+
+        alert(
+            "تعذر إرسال الإعلان: " +
+            (error.message || "خطأ غير معروف") +
+            "\nيرجى إرسال هذه الرسالة لي إذا تكرر الخطأ."
+        );
+
+    } finally {
+        button.disabled = false;
+        button.textContent = originalText;
+    }
+});
+</script>
+
+</body>
+</html>
