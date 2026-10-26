@@ -217,87 +217,11 @@
 
         <h2 class="section-title">🚘 أحدث السيارات</h2>
 
-        <div id="carsList">
-
-            <article
-                class="car-card"
-                data-name="Renault Clio 4"
-                data-wilaya="الجزائر"
-                data-price="2800000"
-                data-fuel="بنزين"
-            >
-                <div class="car-image">🚗</div>
-
-                <div class="car-info">
-                    <h3>Renault Clio 4</h3>
-
-                    <div class="price">
-                        280 مليون سنتيم
-                    </div>
-
-                    <div class="details">
-                        📍 الولاية: الجزائر
-                        <br>
-                        ⛽ الوقود: بنزين
-                        <br>
-                        📅 السنة: 2018
-                    </div>
-                </div>
-            </article>
-
-            <article
-                class="car-card"
-                data-name="Peugeot 208"
-                data-wilaya="وهران"
-                data-price="3200000"
-                data-fuel="ديزل"
-            >
-                <div class="car-image">🚙</div>
-
-                <div class="car-info">
-                    <h3>Peugeot 208</h3>
-
-                    <div class="price">
-                        320 مليون سنتيم
-                    </div>
-
-                    <div class="details">
-                        📍 الولاية: وهران
-                        <br>
-                        ⛽ الوقود: ديزل
-                        <br>
-                        📅 السنة: 2020
-                    </div>
-                </div>
-            </article>
-
-            <article
-                class="car-card"
-                data-name="Dacia Logan"
-                data-wilaya="سطيف"
-                data-price="1900000"
-                data-fuel="غاز"
-            >
-                <div class="car-image">🚘</div>
-
-                <div class="car-info">
-                    <h3>Dacia Logan</h3>
-
-                    <div class="price">
-                        190 مليون سنتيم
-                    </div>
-
-                    <div class="details">
-                        📍 الولاية: سطيف
-                        <br>
-                        ⛽ الوقود: غاز GPL
-                        <br>
-                        📅 السنة: 2016
-                    </div>
-                </div>
-            </article>
-
-        </div>
+<div id="carsList">
+    <p style="text-align:center; color:#666;">
+        جارٍ تحميل السيارات...
+    </p>
+</div>
 
         <p id="emptyMessage" class="empty-message">
             لم نجد سيارات مطابقة لبحثك. جرّب تغيير الخيارات.
@@ -312,8 +236,17 @@
     <footer>
         © 2026 SoukAutoDZ - سوق السيارات الجزائرية
     </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
 
     <script>
+        
+        const db = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+        
         function searchCars() {
             const name = document.getElementById("searchName")
                 .value.trim().toLowerCase();
@@ -366,6 +299,126 @@
 
             document.getElementById("emptyMessage").style.display = "none";
         }
+        
+        async function loadApprovedCars() {
+            const carsList = document.getElementById("carsList");
+            const emptyMessage = document.getElementById("emptyMessage");
+
+            carsList.innerHTML = `
+                <p style="text-align:center; color:#666;">
+                    جارٍ تحميل السيارات...
+                </p>
+            `;
+
+            const { data: cars, error } = await db
+                .from("cars")
+                .select("*")
+                .eq("status", "approved")
+                .order("created_at", { ascending: false });
+
+            if (error) {
+                console.error("خطأ في تحميل السيارات:", error);
+
+                carsList.innerHTML = `
+                    <p style="text-align:center; color:#b00020;">
+                        تعذر تحميل السيارات. حاول لاحقًا.
+                    </p>
+                `;
+
+                return;
+            }
+
+            carsList.innerHTML = "";
+
+            if (!cars || cars.length === 0) {
+                emptyMessage.style.display = "block";
+                emptyMessage.textContent =
+                    "لا توجد سيارات منشورة حاليًا.";
+
+                return;
+            }
+
+            emptyMessage.style.display = "none";
+
+            cars.forEach(function(car) {
+                const card = document.createElement("article");
+                card.className = "car-card";
+
+                card.dataset.name =
+                    `${car.brand || ""} ${car.model || ""}`.toLowerCase();
+
+                card.dataset.wilaya = car.wilaya || "";
+                card.dataset.price = Number(car.price) || 0;
+                card.dataset.fuel = car.fuel || "";
+
+                const imageUrl =
+                    Array.isArray(car.images) && car.images.length > 0
+                        ? car.images[0]
+                        : "";
+
+                const imageHTML = imageUrl
+                    ? `<img
+                            src="${imageUrl}"
+                            alt="صورة السيارة"
+                            style="width:100%; height:200px; object-fit:cover;"
+                       >`
+                    : `<div class="car-image">🚗</div>`;
+
+                const price = Number(car.price) || 0;
+
+                card.innerHTML = `
+                    ${imageHTML}
+
+                    <div class="car-info">
+                        <h3></h3>
+
+                        <div class="price"></div>
+
+                        <div class="details">
+                            📍 الولاية:
+                            <span class="car-wilaya"></span>
+                            <br>
+
+                            ⛽ الوقود:
+                            <span class="car-fuel"></span>
+                            <br>
+
+                            📅 السنة:
+                            <span class="car-year"></span>
+                            <br>
+
+                            🛣️ المسافة:
+                            <span class="car-mileage"></span>
+                        </div>
+                    </div>
+                `;
+
+                card.querySelector("h3").textContent =
+                    `${car.brand || ""} ${car.model || ""}`.trim();
+
+                card.querySelector(".price").textContent =
+                    price.toLocaleString("fr-DZ") + " دج";
+
+                card.querySelector(".car-wilaya").textContent =
+                    car.wilaya || "غير محددة";
+
+                card.querySelector(".car-fuel").textContent =
+                    car.fuel || "غير محدد";
+
+                card.querySelector(".car-year").textContent =
+                    car.year || "غير محددة";
+
+                card.querySelector(".car-mileage").textContent =
+                    car.mileage != null
+                        ? Number(car.mileage).toLocaleString("fr-DZ") + " كم"
+                        : "غير محددة";
+
+                carsList.appendChild(card);
+            });
+        }
+
+        loadApprovedCars();
+        
     </script>
 
 </body>
