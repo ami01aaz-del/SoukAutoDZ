@@ -257,7 +257,27 @@
                 <option>جانت</option>
                 <option>المغير</option>
                 <option>المنيعة</option>
+                <option>آفلو</option>
+                <option>بريكة</option>
+                <option>القنطرة</option>
+                <option>بئر العاتر</option>
+                <option>العريشة</option>
+                <option>قصر الشلالة</option>
+                <option>عين وسارة</option>
+                <option>مسعد</option>
+                <option>قصر البخاري</option>
+                <option>بوسعادة</option>
+                <option>الأبيض سيدي الشيخ</option>
               </select>
+              
+              <label for="commune">البلدية *</label>
+<input
+    type="text"
+    id="commune"
+    name="commune"
+    placeholder="مثال: بلدية وهران"
+    required
+>
 
             <label for="fuel">نوع الوقود *</label>
             <select id="fuel" name="fuel" required>
@@ -446,6 +466,7 @@ console.log("الصور المختارة:", photos);
                 year,
                 price,
                 wilaya,
+                commune: document.getElementById("commune").value.trim(),
                 fuel,
                 mileage,
                 transmission,
@@ -478,4 +499,4 @@ console.log("الصور المختارة:", photos);
 </script>
 
 </body>
-    </html>
+                                             </html>
