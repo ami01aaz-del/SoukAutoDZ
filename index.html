@@ -413,6 +413,11 @@
                         ? Number(car.mileage).toLocaleString("fr-DZ") + " كم"
                         : "غير محددة";
 
+card.style.cursor = "pointer";
+card.addEventListener("click", function() {
+window.location.href = "car-details.html?id=" + encodeURIComponent(car.id);
+});
+
                 carsList.appendChild(card);
             });
         }
