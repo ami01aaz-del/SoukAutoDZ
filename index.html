@@ -188,9 +188,15 @@
                 <option value="سطيف">سطيف</option>
                 <option value="تيزي وزو">تيزي وزو</option>
                 <option value="غرداية">غرداية</option>
-            </select>
+            
+            </select>        <input
+            type="text"
+            id="searchCommune"
+            placeholder="اسم البلدية، مثال: السانية"
+        >
 
-            <input
+        <input
+            
                 type="number"
                 id="maxPrice"
                 placeholder="السعر الأقصى بالدينار (مثال: 3000000)"
@@ -252,6 +258,8 @@
                 .value.trim().toLowerCase();
 
             const wilaya = document.getElementById("wilaya").value;
+            const commune = document.getElementById("searchCommune")
+                .value.trim().toLowerCase();
             const maxPrice = document.getElementById("maxPrice").value;
             const fuel = document.getElementById("fuel").value;
 
@@ -262,17 +270,20 @@
             cars.forEach(function(car) {
                 const carName = car.dataset.name.toLowerCase();
                 const carWilaya = car.dataset.wilaya;
+                const carCommune = (car.dataset.commune || "").toLowerCase();
                 const carPrice = Number(car.dataset.price);
                 const carFuel = car.dataset.fuel;
 
                 const matchesName = carName.includes(name);
                 const matchesWilaya = !wilaya || carWilaya === wilaya;
+                const matchesCommune = carCommune.includes(commune);
                 const matchesPrice = !maxPrice || carPrice <= Number(maxPrice);
                 const matchesFuel = !fuel || carFuel === fuel;
 
                 if (
                     matchesName &&
                     matchesWilaya &&
+                    matchesCommune &&
                     matchesPrice &&
                     matchesFuel
                 ) {
@@ -290,6 +301,7 @@
         function resetSearch() {
             document.getElementById("searchName").value = "";
             document.getElementById("wilaya").value = "";
+          document.getElementById("searchCommune").value = "";    
             document.getElementById("maxPrice").value = "";
             document.getElementById("fuel").value = "";
 
@@ -348,6 +360,7 @@
                     `${car.brand || ""} ${car.model || ""}`.toLowerCase();
 
                 card.dataset.wilaya = car.wilaya || "";
+                card.dataset.commune = car.commune || "";
                 card.dataset.price = Number(car.price) || 0;
                 card.dataset.fuel = car.fuel || "";
 
@@ -429,4 +442,4 @@ window.location.href = "car-details.html?id=" + encodeURIComponent(car.id);
     </script>
 
 </body>
-    </html>
+</html>
