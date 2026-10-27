@@ -375,9 +375,9 @@
                         <div class="price"></div>
 
                         <div class="details">
-                            📍 الولاية:
-                            <span class="car-wilaya"></span>
-                            <br>
+                            📍
+<span class="car-location"></span>
+<br>
 
                             ⛽ الوقود:
                             <span class="car-fuel"></span>
@@ -399,8 +399,10 @@
                 card.querySelector(".price").textContent =
                     price.toLocaleString("fr-DZ") + " دج";
 
-                card.querySelector(".car-wilaya").textContent =
-                    car.wilaya || "غير محددة";
+                card.querySelector(".car-location").textContent =
+car.wilaya
+? car.wilaya + (car.commune ? " — " + car.commune : "")
+: "غير محددة";
 
                 card.querySelector(".car-fuel").textContent =
                     car.fuel || "غير محدد";
@@ -427,4 +429,4 @@ window.location.href = "car-details.html?id=" + encodeURIComponent(car.id);
     </script>
 
 </body>
-</html>
+    </html>
