@@ -222,18 +222,19 @@
         price.textContent =
             (Number(car.price) || 0).toLocaleString("fr-DZ") + " دج";
 
-        const details = document.createElement("div");
-        details.className = "details";
+    const details = document.createElement("div");
+details.className = "details";
 
-        const fields = [
-            ["الولاية", car.wilaya || "غير محددة"],
-            ["سنة الصنع", car.year || "غير محددة"],
-            ["نوع الوقود", car.fuel || "غير محدد"],
-            ["المسافة المقطوعة", car.mileage != null
-                ? Number(car.mileage).toLocaleString("fr-DZ") + " كم"
-                : "غير محددة"],
-            ["ناقل الحركة", car.transmission || "غير محدد"]
-        ];
+    const fields = [
+        ["الولاية", car.wilaya || "غير محددة"],
+        ["البلدية", car.commune || "غير محددة"],
+        ["سنة الصنع", car.year || "غير محددة"],
+        ["نوع الوقود", car.fuel || "غير محدد"],
+        ["المسافة المقطوعة", car.mileage != null
+            ? Number(car.mileage).toLocaleString("fr-DZ") + " كم"
+            : "غير محددة"],
+        ["ناقل الحركة", car.transmission || "غير محدد"]
+    ];
 
         fields.forEach(function(field) {
             const box = document.createElement("div");
