@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة الإدارة | SoukAutoDZ</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 16px;
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            color: #222;
+        }
+
+        button {
+            border: 0;
+            border-radius: 7px;
+            padding: 11px 14px;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        header {
+            max-width: 1100px;
+            margin: 0 auto 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        h1 {
+            color: #1769aa;
+            font-size: 25px;
+            margin: 0;
+        }
+
+        .subtitle {
+            color: #666;
+            margin: 8px 0 0;
+        }
+
+        #logoutButton {
+            background: #dc3545;
+            color: white;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .panel {
+            background: white;
+            padding: 18px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 18px;
+        }
+
+        .panel h2 {
+            margin-top: 0;
+            font-size: 20px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+        .tab-button {
+            background: #e3e8ee;
+            color: #222;
+        }
+
+        .tab-button.active {
+            background: #1769aa;
+            color: white;
+        }
+
+        #message {
+            line-height: 1.8;
+            overflow-wrap: anywhere;
+        }
+
+        .car-card {
+            border: 1px solid #e0e5eb;
+            border-radius: 9px;
+            padding: 15px;
+            margin-top: 15px;
+            background: #fff;
+        }
+
+        .car-card h3 {
+            color: #1769aa;
+            margin-top: 0;
+            font-size: 20px;
+        }
+
+        .car-card p {
+            line-height: 1.7;
+            margin: 6px 0;
+            overflow-wrap: anywhere;
+            white-space: pre-wrap;
+        }
+
+        .car-images {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .car-images img {
+            width: 115px;
+            height: 95px;
+            object-fit: cover;
+            border-radius: 6px;
+            background: #eee;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .approve-button {
+            background: #198754;
+            color: white;
+        }
+
+        .reject-button {
+            background: #fd7e14;
+            color: white;
+        }
+
+        .delete-button {
+            background: #dc3545;
+            color: white;
+        }
+
+        .refresh-button {
+            background: #1769aa;
+            color: white;
+        }
+
+        .status {
+            display: inline-block;
+            background: #fff3cd;
+            color: #664d03;
+            border-radius: 5px;
+            padding: 5px 9px;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .empty {
+            color: #666;
+            padding: 12px 0;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 500px) {
+            body {
+                padding: 10px;
+            }
+
+            header {
+                align-items: flex-start;
+            }
+
+            h1 {
+                font-size: 21px;
+            }
+
+            .panel {
+                padding: 13px;
+            }
+
+            .actions button {
+                flex: 1 1 100%;
+            }
+
+            .car-images img {
+                width: 100px;
+                height: 85px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div>
+        <h1>SoukAutoDZ — لوحة الإدارة</h1>
+        <p class="subtitle">إدارة إعلانات السيارات</p>
+    </div>
+
+    <button id="logoutButton">🚪 تسجيل الخروج</button>
+</header>
+
+<main>
+
+    <section class="panel">
+        <div class="tabs">
+            <button class="tab-button active" id="pendingTab">
+                ⏳ الإعلانات المعلّقة
+            </button>
+
+            <button class="tab-button" id="approvedTab">
+                ✅ الإعلانات المنشورة
+            </button>
+
+            <button class="refresh-button" id="refreshButton">
+                🔄 تحديث
+            </button>
+        </div>
+
+        <h2 id="sectionTitle">الإعلانات المعلّقة</h2>
+        <p id="message" role="status" aria-live="polite">
+            جارٍ التحقق من صلاحيات المشرف...
+        </p>
+
+        <div id="carsList"></div>
+    </section>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+
+<script>
+    const db = supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+    const message = document.getElementById("message");
+    const carsList = document.getElementById("carsList");
+    const logoutButton = document.getElementById("logoutButton");
+    const refreshButton = document.getElementById("refreshButton");
+    const pendingTab = document.getElementById("pendingTab");
+    const approvedTab = document.getElementById("approvedTab");
+    const sectionTitle = document.getElementById("sectionTitle");
+
+    let currentStatus = "pending";
+    let isAdminVerified = false;
+    let isBusy = false;
+
+    function setMessage(text) {
+        message.textContent = text;
+    }
+
+    function formatPrice(value) {
+        if (value === null || value === undefined || value === "") {
+            return "غير محدد";
+        }
+
+        return Number(value).toLocaleString("fr-FR") + " دج";
+    }
+
+    function formatNumber(value, suffix) {
+        if (value === null || value === undefined || value === "") {
+            return "غير محدد";
+        }
+
+        return Number(value).toLocaleString("fr-FR") + suffix;
+    }
+
+    function addDetail(card, label, value) {
+        const p = document.createElement("p");
+        p.textContent = label + ": " + value;
+        card.appendChild(p);
+    }
+
+    function createButton(label, className, handler) {
+        const button = document.createElement("button");
+        button.textContent = label;
+        button.className = className;
+        button.addEventListener("click", handler);
+        return button;
+    }
+
+    async function verifyAdmin() {
+        const { data: sessionData, error: sessionError } =
+            await db.auth.getSession();
+
+        if (sessionError || !sessionData.session) {
+            window.location.replace("admin-login.html");
+            return false;
+        }
+
+        const { data: adminResult, error: adminError } =
+            await db.rpc("is_admin");
+
+        if (adminError || adminResult !== true) {
+            await db.auth.signOut();
+            alert("هذا الحساب لا يملك صلاحيات المشرف.");
+            window.location.replace("admin-login.html");
+            return false;
+        }
+
+        isAdminVerified = true;
+        return true;
+    }
+
+    async function loadCars() {
+        if (!isAdminVerified || isBusy) {
+            return;
+        }
+
+        isBusy = true;
+        carsList.replaceChildren();
+        setMessage("جارٍ تحميل الإعلانات...");
+
+        const { data: cars, error } = await db
+            .from("cars")
+            .select("*")
+            .eq("status", currentStatus)
+            .order("created_at", { ascending: false });
+
+        isBusy = false;
+
+        if (error) {
+            setMessage("تعذّر تحميل الإعلانات: " + error.message);
+            return;
+        }
+
+        if (!cars || cars.length === 0) {
+            setMessage(
+                currentStatus === "pending"
+                    ? "لا توجد إعلانات معلّقة حاليًا."
+                    : "لا توجد إعلانات منشورة حاليًا."
+            );
+            return;
+        }
+
+        setMessage("عدد الإعلانات: " + cars.length);
+
+        cars.forEach(function (car) {
+            const card = document.createElement("article");
+            card.className = "car-card";
+
+            const title = document.createElement("h3");
+            title.textContent =
+                (car.brand || "") + " " + (car.model || "");
+            card.appendChild(title);
+
+            const status = document.createElement("span");
+            status.className = "status";
+            status.textContent =
+                car.status === "approved" ? "منشور" : "بانتظار المراجعة";
+            card.appendChild(status);
+
+            addDetail(card, "السعر", formatPrice(car.price));
+            addDetail(card, "السنة", car.year || "غير محددة");
+            addDetail(card, "الولاية", car.wilaya || "غير محددة");
+            addDetail(card, "البلدية", car.commune || "غير محددة");
+            addDetail(card, "الوقود", car.fuel || "غير محدد");
+            addDetail(card, "المسافة", formatNumber(car.mileage, " كم"));
+            addDetail(card, "ناقل الحركة", car.transmission || "غير محدد");
+            addDetail(card, "الهاتف", car.phone || "غير محدد");
+            addDetail(card, "الوصف", car.description || "لا يوجد وصف");
+
+            if (Array.isArray(car.images) && car.images.length > 0) {
+                const images = document.createElement("div");
+                images.className = "car-images";
+
+                car.images.forEach(function (url) {
+                    const img = document.createElement("img");
+                    img.src = url;
+                    img.alt = "صورة سيارة";
+                    img.loading = "lazy";
+                    images.appendChild(img);
+                });
+
+                card.appendChild(images);
+            }
+
+            const actions = document.createElement("div");
+            actions.className = "actions";
+
+            if (currentStatus === "pending") {
+                const approveButton = createButton(
+                    "✅ الموافقة والنشر",
+                    "approve-button",
+                    function () {
+                        updateCarStatus(car, "approved", "نشر هذا الإعلان؟");
+                    }
+                );
+
+                const rejectButton = createButton(
+                    "❌ رفض الإعلان",
+                    "reject-button",
+                    function () {
+                        updateCarStatus(car, "rejected", "رفض هذا الإعلان؟");
+                    }
+                );
+
+                actions.appendChild(approveButton);
+                actions.appendChild(rejectButton);
+            }
+
+            const deleteButton = createButton(
+                "🗑️ حذف الإعلان",
+                "delete-button",
+                function () {
+                    deleteCar(car);
+                }
+            );
+
+            actions.appendChild(deleteButton);
+            card.appendChild(actions);
+            carsList.appendChild(card);
+        });
+    }
+
+    async function updateCarStatus(car, newStatus, confirmText) {
+        if (!isAdminVerified) {
+            alert("يجب تسجيل الدخول بحساب المشرف.");
+            return;
+        }
+
+        const confirmed = confirm(
+            confirmText + "\n\nالسيارة: " +
+            (car.brand || "") + " " + (car.model || "")
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        setMessage("جارٍ تحديث الإعلان...");
+
+        const { data, error } = await db
+            .from("cars")
+            .update({ status: newStatus })
+            .eq("id", car.id)
+            .eq("status", "pending")
+            .select("id");
+
+        if (error) {
+            setMessage("تعذّر تحديث الإعلان: " + error.message);
+            return;
+        }
+
+        if (!data || data.length === 0) {
+            setMessage(
+                "لم يتم تحديث الإعلان. ربما تغيّرت حالته أو لا تسمح سياسات قاعدة البيانات بهذه العملية."
+            );
+            return;
+        }
+
+        alert(
+            newStatus === "approved"
+                ? "تمت الموافقة على الإعلان ونشره."
+                : "تم رفض الإعلان."
+        );
+
+        await loadCars();
+    }
+
+    async function deleteCar(car) {
+if (!isAdminVerified) {
+alert("يجب تسجيل الدخول بحساب المشرف.");
+return;
+}
+
+const confirmed = confirm(
+    "هل تريد حذف هذا الإعلان وصوره نهائيًا؟\n\n" +
+    (car.brand || "") + " " + (car.model || "")
+);
+
+if (!confirmed) return;
+
+setMessage("جارٍ حذف صور الإعلان...");
+
+// استخراج مسارات الصور من روابط Supabase
+const imageUrls = Array.isArray(car.images) ? car.images : [];
+const imagePaths = [];
+
+for (const url of imageUrls) {
+    const marker = "/storage/v1/object/public/car-images/";
+    const index = url.indexOf(marker);
+
+    if (index === -1) {
+        setMessage("تعذّر تحديد مسار إحدى الصور. لم يُحذف الإعلان.");
+        return;
+    }
+
+    try {
+        const path = decodeURIComponent(
+            url.substring(index + marker.length)
+        );
+
+        if (!path || path.includes("..")) {
+            setMessage("مسار إحدى الصور غير صالح. لم يُحذف الإعلان.");
+            return;
+        }
+
+        imagePaths.push(path);
+    } catch (e) {
+        setMessage("تعذّرت قراءة رابط إحدى الصور. لم يُحذف الإعلان.");
+        return;
+    }
+}
+
+// حذف الصور أولًا
+if (imagePaths.length > 0) {
+    const { error: imageError } = await db
+        .storage
+        .from("car-images")
+        .remove(imagePaths);
+
+    if (imageError) {
+        setMessage(
+            "تعذّر حذف الصور: " + imageError.message +
+            " — لم يُحذف الإعلان."
+        );
+        return;
+    }
+}
+
+// حذف سجل الإعلان بعد نجاح حذف الصور
+setMessage("جارٍ حذف الإعلان...");
+
+const { data, error } = await db
+    .from("cars")
+    .delete()
+    .eq("id", car.id)
+    .select("id");
+
+if (error) {
+    setMessage(
+        "حُذفت الصور، لكن تعذّر حذف سجل الإعلان: " +
+        error.message
+    );
+    return;
+}
+
+if (!data || data.length === 0) {
+    setMessage(
+        "حُذفت الصور، لكن لم يُحذف سجل الإعلان. تحقق من الصلاحيات."
+    );
+    return;
+}
+
+alert("تم حذف الإعلان وصوره بنجاح.");
+await loadCars();
+
+}
+
+    pendingTab.addEventListener("click", async function () {
+        currentStatus = "pending";
+        sectionTitle.textContent = "الإعلانات المعلّقة";
+        pendingTab.classList.add("active");
+        approvedTab.classList.remove("active");
+        await loadCars();
+    });
+
+    approvedTab.addEventListener("click", async function () {
+        currentStatus = "approved";
+        sectionTitle.textContent = "الإعلانات المنشورة";
+        approvedTab.classList.add("active");
+        pendingTab.classList.remove("active");
+        await loadCars();
+    });
+
+    refreshButton.addEventListener("click", loadCars);
+
+    logoutButton.addEventListener("click", async function () {
+        logoutButton.disabled = true;
+        await db.auth.signOut();
+        window.location.replace("admin-login.html");
+    });
+
+    async function startAdmin() {
+        const allowed = await verifyAdmin();
+
+        if (allowed) {
+            await loadCars();
+        }
+    }
+
+    startAdmin();
+</script>
+
+</body>
+</html>
