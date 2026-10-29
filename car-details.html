@@ -76,66 +76,159 @@
             gap: 12px;
         }
 
-        .detail {
-            background: #f5f6f8;
-            padding: 12px;
-            border-radius: 8px;
-            overflow-wrap: anywhere;
-        }
+        .details {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 20px;
+}
 
-        .label {
-            color: #666;
-            font-size: 14px;
-        }
+.detail {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    padding: 14px 12px;
+    background: #ffffff;
+    border: 1px solid #e1eaf7;
+    border-radius: 14px;
+    overflow-wrap: anywhere;
+}
 
-        .value {
-            font-weight: bold;
-        }
+.detail-icon {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #eaf2ff;
+    color: #0866df;
+}
 
-        .description {
-            margin-top: 22px;
-            white-space: pre-wrap;
-            overflow-wrap: anywhere;
-        }
+.detail-icon svg {
+    width: 23px;
+    height: 23px;
+    display: block;
+}
 
-        .contact {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 12px 22px;
-            border-radius: 8px;
-            background: #087f45;
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
+.label {
+    color: #647da3;
+    font-size: 13px;
+    margin-bottom: 5px;
+}
 
-        .message {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            text-align: center;
-        }
+.value {
+    color: #142b4a;
+    font-size: 15px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
 
-        .back {
-            display: inline-block;
-            margin-bottom: 18px;
-            color: #142b4a;
-            text-decoration: none;
-        }
+.description {
+    margin-top: 20px;
+    padding: 18px;
+    background: #ffffff;
+    border: 1px solid #e1eaf7;
+    border-radius: 14px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
 
-        @media (max-width: 500px) {
-            .details {
-                grid-template-columns: 1fr;
-            }
+.contacts {
+    margin-top: 20px;
+    padding: 18px;
+    background: #ffffff;
+    border: 1px solid #e1eaf7;
+    border-radius: 14px;
+}
 
-            h1 {
-                font-size: 23px;
-            }
+.contacts h3 {
+    margin: 0 0 14px;
+    color: #142b4a;
+    font-size: 18px;
+}
 
-            .car-info {
-                padding: 16px;
-            }
-        }
+.contact-row {
+    margin-top: 10px;
+}
+
+.contact {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 15px 12px;
+    border-radius: 12px;
+    background: #0866df;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    direction: ltr;
+}
+
+.contact svg {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+}
+
+.message {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.back {
+    display: inline-block;
+    margin-bottom: 18px;
+    color: #142b4a;
+    text-decoration: none;
+}
+
+@media (max-width: 500px) {
+    .details {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .detail {
+        gap: 8px;
+        padding: 10px 8px;
+    }
+
+    .detail-icon {
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
+    }
+
+    .detail-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .label {
+        font-size: 12px;
+    }
+
+    .value {
+        font-size: 13px;
+    }
+
+    h1 {
+        font-size: 23px;
+    }
+
+    .car-info {
+        padding: 16px;
+    }
+}
     </style>
 </head>
 
@@ -222,35 +315,76 @@
         price.textContent =
             (Number(car.price) || 0).toLocaleString("fr-DZ") + " دج";
 
-    const details = document.createElement("div");
-details.className = "details";
+        const details = document.createElement("div");
+        details.className = "details";
 
-    const fields = [
-        ["الولاية", car.wilaya || "غير محددة"],
-        ["البلدية", car.commune || "غير محددة"],
-        ["سنة الصنع", car.year || "غير محددة"],
-        ["نوع الوقود", car.fuel || "غير محدد"],
-        ["المسافة المقطوعة", car.mileage != null
+  const fields = [
+    {
+        label: "الولاية",
+        value: car.wilaya || "غير محددة",
+        icon: '<path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/>'
+    },
+    {
+        label: "سنة الصنع",
+        value: car.year || "غير محددة",
+        icon: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18"/>'
+    },
+    {
+        label: "نوع الوقود",
+        value: car.fuel || "غير محدد",
+        icon: '<path d="M6 3h9v18H6z"/><path d="M15 7h3l2 3v7h-5"/><path d="M9 7h3M9 11h3"/>'
+    },
+    {
+        label: "المسافة المقطوعة",
+        value: car.mileage != null
             ? Number(car.mileage).toLocaleString("fr-DZ") + " كم"
-            : "غير محددة"],
-        ["ناقل الحركة", car.transmission || "غير محدد"]
-    ];
+            : "غير محددة",
+        icon: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/>'
+    },
+    {
+        label: "ناقل الحركة",
+        value: car.transmission || "غير محدد",
+        icon: '<path d="M6 5v14M12 5v14M18 5v14M6 8h12M6 16h12"/><circle cx="6" cy="5" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="18" cy="5" r="2"/>'
+    }
+];
 
-        fields.forEach(function(field) {
-            const box = document.createElement("div");
-            box.className = "detail";
+fields.forEach(function(field) {
+    const box = document.createElement("div");
+    box.className = "detail";
 
-            const label = document.createElement("div");
-            label.className = "label";
-            label.textContent = field[0];
+    const iconBox = document.createElement("div");
+    iconBox.className = "detail-icon";
 
-            const value = document.createElement("div");
-            value.className = "value";
-            value.textContent = field[1];
+    const svg = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "svg"
+    );
 
-            box.append(label, value);
-            details.appendChild(box);
-        });
+    svg.setAttribute("viewBox", "0 0 24 24");
+    svg.setAttribute("fill", "none");
+    svg.setAttribute("stroke", "currentColor");
+    svg.setAttribute("stroke-width", "1.8");
+    svg.setAttribute("stroke-linecap", "round");
+    svg.setAttribute("stroke-linejoin", "round");
+
+    svg.innerHTML = field.icon;
+    iconBox.appendChild(svg);
+
+    const textBox = document.createElement("div");
+    textBox.style.minWidth = "0";
+
+    const label = document.createElement("div");
+    label.className = "label";
+    label.textContent = field.label;
+
+    const value = document.createElement("div");
+    value.className = "value";
+    value.textContent = field.value;
+
+    textBox.append(label, value);
+    box.append(iconBox, textBox);
+    details.appendChild(box);
+});
 
         const description = document.createElement("div");
         description.className = "description";
@@ -266,13 +400,66 @@ details.className = "details";
 
         info.append(title, price, details, description);
 
-        if (car.phone) {
-            const contact = document.createElement("a");
-            contact.className = "contact";
-            contact.textContent = "اتصل بصاحب الإعلان";
-            contact.href = "tel:" + String(car.phone).replace(/[^\d+]/g, "");
-            info.appendChild(contact);
-        }
+        const contacts = document.createElement("div");
+contacts.className = "contacts";
+
+const contactsTitle = document.createElement("h3");
+contactsTitle.textContent = "📞 الاتصال بصاحب الإعلان";
+contacts.appendChild(contactsTitle);
+
+const phoneNumbers = String(car.phone || "")
+.split(/[,;\n/]+/)
+.map(function(phone) {
+return phone.trim();
+})
+.filter(function(phone) {
+return phone.length > 0;
+})
+.slice(0, 3);
+
+phoneNumbers.forEach(function(phone, index) {
+const row = document.createElement("div");
+row.className = "contact-row";
+
+const number = document.createElement("span");
+number.className = "contact-number";
+number.textContent = phone;
+
+const button = document.createElement("a");
+button.className = "contact";
+button.innerHTML = `
+    <svg viewBox="0 0 24 24"
+         fill="none"
+         stroke="currentColor"
+         stroke-width="2"
+         stroke-linecap="round"
+         stroke-linejoin="round"
+         aria-hidden="true">
+        <path d="M22 16.92v3a2 2 0 0 1-2.18 2
+        19.79 19.79 0 0 1-8.63-3.07
+        19.5 19.5 0 0 1-6-6
+        19.79 19.79 0 0 1-3.07-8.67
+        A2 2 0 0 1 4.11 2h3
+        a2 2 0 0 1 2 1.72
+        c.12.96.36 1.9.7 2.79
+        a2 2 0 0 1-.45 2.11L8.09 9.91
+        a16 16 0 0 0 6 6l1.27-1.27
+        a2 2 0 0 1 2.11-.45
+        c.89.34 1.83.58 2.79.7
+        A2 2 0 0 1 22 16.92z"/>
+    </svg>
+    <span>${phone}</span>
+`;
+button.href = "tel:" + phone.replace(/[^\d+]/g, "");
+
+row.append(number, button);
+contacts.appendChild(row);
+
+});
+
+if (phoneNumbers.length > 0) {
+info.insertBefore(contacts, description);
+}
 
         container.replaceChildren(image, info);
 
