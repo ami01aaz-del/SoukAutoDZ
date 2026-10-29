@@ -99,56 +99,133 @@
         }
 
         .car-card {
-            background: white;
-            margin-bottom: 15px;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid #eee;
-        }
+background: #fff;
+margin-bottom: 18px;
+border-radius: 16px;
+overflow: hidden;
+border: 1px solid #e8edf5;
+box-shadow: 0 3px 12px rgba(15, 23, 42, 0.06);
+transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
 
-        .car-image {
-            height: 150px;
-            background: #e8edf5;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 55px;
-        }
+    .car-card:active {
+        transform: scale(0.99);
+    }
 
-        .car-info {
-            padding: 15px;
-        }
+    .car-image {
+        height: 210px;
+        background: #f1f5f9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 55px;
+        overflow: hidden;
+    }
 
-        .car-info h3 {
-            margin: 0 0 10px;
-        }
+    .car-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        display: block;
+    }
 
-        .price {
-            color: #155eef;
-            font-size: 20px;
-            font-weight: bold;
-        }
+    .car-info {
+        padding: 16px;
+    }
 
-        .details {
-            color: #666;
-            font-size: 14px;
-            line-height: 1.8;
-        }
+    .car-info h3 {
+        margin: 0 0 12px;
+        color: #172033;
+        font-size: 18px;
+        font-weight: 700;
+        line-height: 1.6;
+        overflow-wrap: anywhere;
+    }
 
-        .empty-message {
-            display: none;
-            text-align: center;
-            color: #666;
-            padding: 20px;
-        }
+    .price {
+        color: #155eef;
+        font-size: 22px;
+        font-weight: 800;
+        line-height: 1.5;
+        margin-bottom: 8px;
+    }
 
-        footer {
-            text-align: center;
-            background: white;
-            color: #666;
-            padding: 22px 10px;
-            margin-top: 30px;
-        }
+    .details {
+color: #475569;
+font-size: 13px;
+line-height: 1.5;
+}
+
+.specs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.spec-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 3px;
+    min-width: 0;
+    padding: 8px;
+    background: #f5f7fb;
+    border: 1px solid #e8edf5;
+    border-radius: 10px;
+    overflow-wrap: anywhere;
+}
+
+.spec-label {
+    color: #64748b;
+    font-size: 11px;
+}
+
+.car-location,
+.car-fuel,
+.car-year,
+.car-mileage {
+    color: #1e293b;
+    font-size: 13px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.car-image {
+height: 190px;
+background: #f1f5f9;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 55px;
+overflow: hidden;
+}
+
+.car-card-photo {
+display: block;
+width: 100%;
+height: 100%;
+object-fit: cover;
+object-position: center;
+}
+
+@media (max-width: 360px) {
+.specs-grid {
+gap: 6px;
+}
+
+.spec-item {
+    padding: 8px;
+}
+
+.car-info {
+    padding: 12px;
+}
+
+}
+    
     </style>
 </head>
 
@@ -434,41 +511,75 @@
                         : "";
 
                 const imageHTML = imageUrl
-                    ? `<img
-                            src="${imageUrl}"
-                            alt="صورة السيارة"
-                            style="width:100%; height:200px; object-fit:cover;"
-                       >`
-                    : `<div class="car-image">🚗</div>`;
+    ? `<div class="car-image">
+           <img class="car-card-photo"
+                src="${imageUrl}"
+                alt="صورة السيارة">
+       </div>`
+    : `<div class="car-image">🚗</div>`;
+
 
                 const price = Number(car.price) || 0;
 
                 card.innerHTML = `
-                    ${imageHTML}
+${imageHTML}
 
-                    <div class="car-info">
-                        <h3></h3>
+<div class="car-info">
+    <h3></h3>
 
-                        <div class="price"></div>
+    <div class="price"></div>
 
-                        <div class="details">
-                            📍
-<span class="car-location"></span>
-<br>
+    <div class="details specs-grid">
 
-                            ⛽ الوقود:
-                            <span class="car-fuel"></span>
-                            <br>
+        <div class="spec-item">
+            <span class="spec-label">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;margin-left:5px">
+                    <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/>
+                    <circle cx="12" cy="10" r="2.5"/>
+                </svg>
+                الموقع
+            </span>
+            <span class="car-location"></span>
+        </div>
 
-                            📅 السنة:
-                            <span class="car-year"></span>
-                            <br>
+        <div class="spec-item">
+            <span class="spec-label">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;margin-left:5px">
+                    <path d="M6 3h9v18H6z"/>
+                    <path d="M15 7h3l2 3v7h-5"/>
+                    <path d="M9 7h3M9 11h3M9 15h3"/>
+                </svg>
+                الوقود
+            </span>
+            <span class="car-fuel"></span>
+        </div>
 
-                            🛣️ المسافة:
-                            <span class="car-mileage"></span>
-                        </div>
-                    </div>
-                `;
+        <div class="spec-item">
+            <span class="spec-label">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;margin-left:5px">
+                    <rect x="3" y="5" width="18" height="16" rx="2"/>
+                    <path d="M7 3v4M17 3v4M3 10h18"/>
+                </svg>
+                السنة
+            </span>
+            <span class="car-year"></span>
+        </div>
+
+        <div class="spec-item">
+            <span class="spec-label">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;margin-left:5px">
+                    <circle cx="12" cy="12" r="9"/>
+                    <path d="M12 7v5l4 2"/>
+                </svg>
+                المسافة
+            </span>
+            <span class="car-mileage"></span>
+        </div>
+
+    </div>
+</div>
+
+`;
 
                 card.querySelector("h3").textContent =
                     `${car.brand || ""} ${car.model || ""}`.trim();
